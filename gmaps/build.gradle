@@ -19,30 +19,30 @@ def _libraryDescription = 'Draw directions and set addresses easiest way'
 def _licenseName = 'The Apache Software License, Version 2.0'
 def _licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 
-//ext {
-//    bintrayRepo = 'maven'
-//    bintrayName = _name
-//
-//    publishedGroupId = _publishedGroupId
-//    libraryName = _libraryName
-//    artifact = _artifactId
-//
-//    libraryDescription = _libraryDescription
-//
-//    siteUrl = _siteUrl
-//    gitUrl = _gitUrl
-//    githubRepository = _githubRepository
-//
-//    libraryVersion = version
-//
-//    developerId = _developerId
-//    developerName = _developerName
-//    developerEmail = _developerEmail
-//
-//    licenseName = _licenseName
-//    licenseUrl = _licenseUrl
-//    allLicenses = ["Apache-2.0"]
-//}
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = _name
+
+    publishedGroupId = _publishedGroupId
+    libraryName = _libraryName
+    artifact = _artifactId
+
+    libraryDescription = _libraryDescription
+
+    siteUrl = _siteUrl
+    gitUrl = _gitUrl
+    githubRepository = _githubRepository
+
+    libraryVersion = version
+
+    developerId = _developerId
+    developerName = _developerName
+    developerEmail = _developerEmail
+
+    licenseName = _licenseName
+    licenseUrl = _licenseUrl
+    allLicenses = ["Apache-2.0"]
+}
 
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -83,32 +83,32 @@ install {
         pom {
             project {
                 packaging 'aar'
-                groupId _publishedGroupId
-                artifactId _artifactId
+                groupId publishedGroupId
+                artifactId artifact
 
                 // Add your description here
-                name _libraryName
-                description _libraryDescription
-                url _siteUrl
+                name libraryName
+                description libraryDescription
+                url siteUrl
 
                 // Set your license
                 licenses {
                     license {
-                        name _licenseName
-                        url _licenseUrl
+                        name licenseName
+                        url licenseUrl
                     }
                 }
                 developers {
                     developer {
-                        id _developerId
-                        name _developerName
-                        email _developerEmail
+                        id developerId
+                        name developerName
+                        email developerEmail
                     }
                 }
                 scm {
-                    connection _gitUrl
-                    developerConnection _gitUrl
-                    url _siteUrl
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
 
                 }
             }
@@ -117,6 +117,7 @@ install {
 }
 
 apply plugin: 'com.jfrog.bintray'
+
 
 if (project.hasProperty("android")) { // Android libraries
     task sourcesJar(type: Jar) {
@@ -155,13 +156,21 @@ bintray {
 
     configurations = ['archives']
     pkg {
-        repo = 'maven'
-        name = _name
-        desc = _libraryDescription
-        websiteUrl = _siteUrl
-        vcsUrl = _gitUrl
-        licenses =  ["Apache-2.0"]
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
         publish = true
         publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
     }
 }
