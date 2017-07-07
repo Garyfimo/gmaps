@@ -2,50 +2,30 @@ apply plugin: 'com.android.library'
 
 version = "1.0.0"
 
-def _siteUrl = 'https://github.com/Garyfimo/groutemaps'
-def _gitUrl = 'https://github.com/Garyfimo/groutemaps.git'
-def _githubRepository = 'Garyfimo/GMaps'
-
-def _developerName = "Gary Johal Figuerala Mora"
-def _developerEmail = "garyfimo@gmail.com"
-def _developerId = "Garyfimo"
-
-def _name = 'gmaps'
-def _artifactId = 'gmaps'
-def _libraryName = 'GMaps'
-def _publishedGroupId = 'com.libraries.garyfimo'
-def _libraryDescription = 'Draw directions and set addresses easiest way'
-
-def _licenseName = 'The Apache Software License, Version 2.0'
-def _licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-
 ext {
     bintrayRepo = 'maven'
-    bintrayName = _name
+    bintrayName = 'gmaps'
 
-    publishedGroupId = _publishedGroupId
-    libraryName = _libraryName
-    artifact = _artifactId
+    publishedGroupId = 'com.libraries.garyfimo'
+    libraryName = 'GMaps'
+    artifact = 'gmaps'
 
-    libraryDescription = _libraryDescription
+    libraryDescription = 'Draw directions and set addresses easiest way'
 
-    siteUrl = _siteUrl
-    gitUrl = _gitUrl
-    githubRepository = _githubRepository
+    siteUrl = 'https://github.com/Garyfimo/GMaps'
+    gitUrl = 'https://github.com/Garyfimo/GMaps.git'
+    githubRepository = 'Garyfimo/GMaps'
 
     libraryVersion = version
 
-    developerId = _developerId
-    developerName = _developerName
-    developerEmail = _developerEmail
+    developerId = "Garyfimo"
+    developerName = "Gary Johal Figuerala Mora"
+    developerEmail = "garyfimo@gmail.com"
 
-    licenseName = _licenseName
-    licenseUrl = _licenseUrl
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
 }
-
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 25
@@ -76,6 +56,8 @@ dependencies {
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
+
+group = publishedGroupId                               // Maven Group ID for the artifact
 
 install {
     repositories.mavenInstaller {
@@ -118,6 +100,7 @@ install {
 
 apply plugin: 'com.jfrog.bintray'
 
+version = libraryVersion
 
 if (project.hasProperty("android")) { // Android libraries
     task sourcesJar(type: Jar) {
@@ -160,17 +143,12 @@ bintray {
         name = bintrayName
         desc = libraryDescription
         websiteUrl = siteUrl
+        issueTrackerUrl = siteUrl+'/issues'
         vcsUrl = gitUrl
         licenses = allLicenses
-        publish = true
+        githubRepo = githubRepository //Optional Github repository
+        githubReleaseNotesFile = 'README.md' //Optional Github readme file
+        publish = false
         publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password")
-                //Optional. The passphrase for GPG signing'
-            }
-        }
     }
 }
