@@ -6,10 +6,20 @@ version = "1.0.0"
 
 def _siteUrl = 'https://github.com/Garyfimo/groutemaps'
 def _gitUrl = 'https://github.com/Garyfimo/groutemaps.git'
+def _githubRepository = 'Garyfimo/GMaps'
 
 def _developerName = "Gary Johal Figuerala Mora"
 def _developerEmail = "garyfimo@gmail.com"
 def _developerId = "Garyfimo"
+
+def _name = 'gmaps'
+def _libraryName = 'GMaps'
+def _publishedGroupId = 'com.libraries.garyfimo'
+def _libraryDescription = 'Draw directions and set addresses easiest way'
+
+def _licenseName = 'The Apache Software License, Version 2.0'
+def _licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+
 
 android {
     compileSdkVersion 25
@@ -39,18 +49,66 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 }
 
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = _name
+        websiteUrl = _siteUrl
+        issueTrackerUrl = _siteUrl + '/issues'
+        vcsUrl = _gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'gmaps'
+    bintrayName = _name
 
-    publishedGroupId = 'com.libraries.garyfimo'
-    libraryName = 'gmaps'
-    artifact = 'gmaps'
+    publishedGroupId = _publishedGroupId
+    libraryName = _libraryName
+    artifact = _name
 
-    libraryDescription = 'Draw directions and set addresses easiest way'
+    libraryDescription = _libraryDescription
 
     siteUrl = _siteUrl
     gitUrl = _gitUrl
+    githubRepository = _githubRepository
 
     libraryVersion = version
 
@@ -58,11 +116,50 @@ ext {
     developerName = _developerName
     developerEmail = _developerEmail
 
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    licenseName = _licenseName
+    licenseUrl = _licenseUrl
     allLicenses = ["Apache-2.0"]
 }
 
 configurations {
     javadocDeps
+}
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId _publishedGroupId
+                artifactId _name
+
+                // Add your description here
+                name _libraryName
+                description _libraryDescription
+                url _siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name _licenseName
+                        url _licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id _developerId
+                        name _developerName
+                        email _developerEmail
+                    }
+                }
+                scm {
+                    connection _gitUrl
+                    developerConnection _gitUrl
+                    url _siteUrl
+
+                }
+            }
+        }
+    }
 }
