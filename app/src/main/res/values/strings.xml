@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GMapsExample</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_configuration">Map</string>
+    <string name="title_activity_waypoints_example">Map</string>
+    <string name="title_activity_address">Map</string>
+</resources>
