@@ -31,7 +31,8 @@ public class AddressPresenterImpl implements AddressPresenter, AddressInteractor
     public void onRequestAddressSuccess(AddressResponse response) {
         if (response.getResults().size() > 0) {
             Result result = response.getResults().get(0);
-            mView.onGetAddressSuccess(result.getFormattedAddress());
+            String address = String.format("%s %s", result.getAddressComponents().get(1).getShortName(), result.getAddressComponents().get(0).getShortName());
+            mView.onGetAddressSuccess(address);
         }
     }
 }
