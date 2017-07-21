@@ -9,4 +9,5 @@ import com.google.android.gms.maps.model.LatLng;
 public interface AddressPresenter {
 
     void getAddress(LatLng latLng);
+    void getGeoDecode(LatLng latLng);
 }

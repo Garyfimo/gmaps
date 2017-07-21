@@ -45,6 +45,24 @@ public class GAddressMaps implements AddressView {
         return this;
     }
 
+    public GAddressMaps setGeoDecode(LatLng latLng, TextView textView) {
+        if ((latLng == null) || (textView == null)) {
+            throw new IllegalArgumentException(NULL_PARAMETERS_ARE_NOT_ACCEPTED);
+        }
+        mTextView = textView;
+        mPresenter.getGeoDecode(latLng);
+        return this;
+    }
+
+    public GAddressMaps setGeoDecode(LatLng latLng, EditText editText) {
+        if ((latLng == null) || (editText == null)) {
+            throw new IllegalArgumentException(NULL_PARAMETERS_ARE_NOT_ACCEPTED);
+        }
+        mEditText = editText;
+        mPresenter.getGeoDecode(latLng);
+        return this;
+    }
+
     @Override
     public void onGetAddressSuccess(String address) {
         if (mEditText != null) {
